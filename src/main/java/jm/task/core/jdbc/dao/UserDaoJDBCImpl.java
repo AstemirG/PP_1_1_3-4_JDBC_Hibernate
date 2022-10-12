@@ -20,23 +20,19 @@ public class UserDaoJDBCImpl implements UserDao {
                 "  `id` int NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` varchar(45) NOT NULL,\n" +
                 "  `lastName` varchar(45) NOT NULL,\n" +
-                "  `age` int DEFAULT NULL,\n" +
+                "  `age` int NOT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
                 ") ";
         try (Statement statement = Util.getConnect().createStatement()) {
             statement.execute(request);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (SQLException e) { }
     }
 
     public void dropUsersTable() {
         String request = "drop table users";
         try (Statement statement = Util.getConnect().createStatement()) {
             statement.execute(request);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (SQLException e) { }
     }
 
     public void saveUser(String name, String lastName, byte age) {
@@ -46,9 +42,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2,lastName);
             preparedStatement.setByte(3,age);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (SQLException e) { }
     }
 
     public void removeUserById(long id) {
@@ -56,9 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = Util.getConnect().prepareStatement(request)){
             preparedStatement.setLong(1,id);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (SQLException e) { }
     }
 
     public List<User> getAllUsers() {
@@ -74,9 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setAge(resultSet.getByte("age"));
                 allUsers.add(user);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (SQLException e) { }
         return allUsers;
     }
 
@@ -84,8 +74,6 @@ public class UserDaoJDBCImpl implements UserDao {
         String request = "truncate users;";
         try (Statement statement = Util.getConnect().createStatement()){
             statement.execute(request);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (SQLException e) { }
     }
 }
