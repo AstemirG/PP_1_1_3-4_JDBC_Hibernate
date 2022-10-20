@@ -14,29 +14,26 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        final String request = "CREATE TABLE if not exists `users` (\n" +
-                "  `id` int NOT NULL AUTO_INCREMENT,\n" +
-                "  `name` varchar(45) NOT NULL,\n" +
-                "  `lastName` varchar(45) NOT NULL,\n" +
-                "  `age` int NOT NULL,\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ";
         try (Statement statement = coonect.createStatement()) {
-            statement.execute(request);
-
+            statement.execute("CREATE TABLE if not exists `users` (\n" +
+                    "  `id` int NOT NULL AUTO_INCREMENT,\n" +
+                    "  `name` varchar(45) NOT NULL,\n" +
+                    "  `lastName` varchar(45) NOT NULL,\n" +
+                    "  `age` int NOT NULL,\n" +
+                    "  PRIMARY KEY (`id`)\n" +
+                    ") ");
         } catch (SQLException e) { }
     }
 
     public void dropUsersTable() {
-        final String request = "drop table if exists users";
         try (Statement statement = coonect.createStatement()) {
-            statement.execute(request);
+            statement.execute("drop table if exists users");
         } catch (SQLException e) { }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        final String request = "insert into users(name,lastName,age) values(?,?,?);";
-        try (PreparedStatement preparedStatement = coonect.prepareStatement(request)) {
+        try (PreparedStatement preparedStatement = coonect.
+                prepareStatement("insert into users(name,lastName,age) values(?,?,?);")) {
             preparedStatement.setString(1,name);
             preparedStatement.setString(2,lastName);
             preparedStatement.setByte(3,age);
@@ -45,8 +42,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        final String request = "delete from users where id = ?";
-        try (PreparedStatement preparedStatement = coonect.prepareStatement(request)){
+        try (PreparedStatement preparedStatement = coonect.
+                prepareStatement("delete from users where id = ?")){
             preparedStatement.setLong(1,id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) { }
@@ -54,9 +51,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();
-        final String request = "select * from users;";
         try (Statement statement = coonect.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(request);
+            ResultSet resultSet = statement.executeQuery("select * from users;");
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -70,9 +66,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        final String request = "truncate users;";
         try (Statement statement = coonect.createStatement()){
-            statement.execute(request);
+            statement.execute("truncate users;");
         } catch (SQLException e) { }
     }
 }
